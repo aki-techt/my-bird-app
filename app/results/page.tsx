@@ -1,4 +1,4 @@
-import ResultsTable from '@/components/ResultsTable';
+import ResultsTable from '@/components/ResultsTable'
 
 export default function ResultsPage() {
   return (
@@ -6,5 +6,5 @@ export default function ResultsPage() {
       <h1 className="text-2xl font-bold">判定結果一覧</h1>
       <ResultsTable />
     </section>
-  );
+  )
 }

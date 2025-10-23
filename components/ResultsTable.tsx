@@ -1,51 +1,69 @@
-'use client';
-import { useBirdStore } from '@/lib/store';
-import { useState } from 'react';
-import PreviewDialog from './PreviewDialog';
+'use client'
+import { useBirdStore } from '@/lib/store'
+import { useState } from 'react'
+import PreviewDialog from './PreviewDialog'
+import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
 
 export default function ResultsTable() {
-  const results = useBirdStore((s) => s.results);
-  const [openId, setOpenId] = useState<string | null>(null);
+  const results = useBirdStore((s) => s.results)
+  const reset = useBirdStore((s) => s.reset)
+  const [openId, setOpenId] = useState<string | null>(null)
+  const current = results.find((r) => r.id === openId)
 
-  const current = results.find((r) => r.id === openId);
+  if (results.length === 0) {
+    return (
+      <div className="rounded-2xl border p-10 text-center text-gray-600">
+        まだ結果がありません。<span className="underline">アップロード</span> から判定してみましょう。
+      </div>
+    )
+  }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full text-sm">
-        <thead>
-          <tr className="border-b text-left">
-            <th className="p-2">日時</th>
-            <th className="p-2">ファイル名</th>
-            <th className="p-2">推定種</th>
-            <th className="p-2">確度</th>
-            <th className="p-2">生息</th>
-            <th className="p-2">詳細</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((r) => (
-            <tr key={r.id} className="border-b hover:bg-gray-50">
-              <td className="p-2">{new Date(r.createdAt).toLocaleString()}</td>
-              <td className="p-2">{r.filename}</td>
-              <td className="p-2">{r.species}</td>
-              <td className="p-2">{Math.round(r.confidence * 100)}%</td>
-              <td className="p-2">{r.habitat}</td>
-              <td className="p-2">
-                <button className="text-blue-600 underline" onClick={() => setOpenId(r.id)}>
-                  プレビュー
-                </button>
-              </td>
-            </tr>
-          ))}
-          {results.length === 0 && (
-            <tr>
-              <td className="p-6 text-center text-gray-500" colSpan={6}>
-                まだ結果がありません。/upload から判定してみましょう。
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+    <div className="space-y-3">
+      <div className="text-right">
+        <Button variant="secondary" size="sm" onClick={reset}>
+          リセット
+        </Button>
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>日時</TableHead>
+              <TableHead>ファイル名</TableHead>
+              <TableHead>推定種</TableHead>
+              <TableHead>確度</TableHead>
+              <TableHead>生息</TableHead>
+              <TableHead>詳細</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {results.map((r) => (
+              <TableRow key={r.id} className="hover:bg-gray-50/50">
+                <TableCell>{new Date(r.createdAt).toLocaleString()}</TableCell>
+                <TableCell>{r.filename}</TableCell>
+                <TableCell>{r.species}</TableCell>
+                <TableCell>{Math.round(r.confidence * 100)}%</TableCell>
+                <TableCell>{r.habitat}</TableCell>
+                <TableCell>
+                  <Button variant="link" onClick={() => setOpenId(r.id)}>
+                    プレビュー
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <PreviewDialog
         open={!!openId}
@@ -53,5 +71,5 @@ export default function ResultsTable() {
         text={current?.previewText ?? ''}
       />
     </div>
-  );
+  )
 }

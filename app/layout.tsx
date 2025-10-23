@@ -1,5 +1,6 @@
 import './globals.css';
 import Link from 'next/link';
+import { Toaster } from 'sonner'
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </nav>
       </header>
       <main>{children}</main>
+      <Toaster richColors /> {/* ← これでどこでも toast が使える */}
     </body>
 </html>
 );
