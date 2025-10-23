@@ -1,4 +1,4 @@
-import UploadDropzone from '@/components/UploadDropzone';
+import UploadDropzone from '@/components/UploadDropzone'
 
 export default function UploadPage() {
   return (
@@ -7,5 +7,5 @@ export default function UploadPage() {
       <p className="text-sm text-gray-600">Step1: ダミーAPIで通します。後でFastAPIに切替。</p>
       <UploadDropzone />
     </section>
-  );
+  )
 }
